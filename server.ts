@@ -6,7 +6,6 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import nodemailer from "nodemailer";
 import cors from "cors";
-import twilio from "twilio";
 import { fileURLToPath } from "url";
 
 
