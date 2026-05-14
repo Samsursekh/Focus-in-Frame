@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
@@ -5,6 +8,7 @@ import nodemailer from "nodemailer";
 import cors from "cors";
 import twilio from "twilio";
 import { fileURLToPath } from "url";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,18 +21,18 @@ async function startServer() {
   app.use(express.json());
 
   // Twilio Lazy Initialization
-  let twilioClient: any = null;
-  function getTwilio() {
-    if (!twilioClient) {
-      const sid = process.env.VITE_TWILIO_ACCOUNT_SID;
-      const token = process.env.TWILIO_AUTH_TOKEN;
-      if (!sid || !token) {
-        throw new Error("Twilio credentials (SID or Auth Token) are missing in environment variables.");
-      }
-      twilioClient = twilio(sid, token);
-    }
-    return twilioClient;
-  }
+  // let twilioClient: any = null;
+  // function getTwilio() {
+  //   if (!twilioClient) {
+  //     const sid = process.env.VITE_TWILIO_ACCOUNT_SID;
+  //     const token = process.env.TWILIO_AUTH_TOKEN;
+  //     if (!sid || !token) {
+  //       throw new Error("Twilio credentials (SID or Auth Token) are missing in environment variables.");
+  //     }
+  //     twilioClient = twilio(sid, token);
+  //   }
+  //   return twilioClient;
+  // }
 
   // API Routes
   app.post("/api/inquiry", async (req, res) => {
@@ -81,17 +85,17 @@ Message: ${message}
       console.log("Message sent: %s", info.messageId);
 
       // Send SMS Confirmation to User
-      try {
-        const client = getTwilio();
-        await client.messages.create({
-          body: `Hi ${name}, thank you for reaching out to Focus in Frame. Your inquiry has been received! We'll get back to you shortly.`,
-          from: process.env.VITE_TWILIO_PHONE_NUMBER,
-          to: phone,
-        });
-      } catch (smsError) {
-        console.error("Failed to send confirmation SMS:", smsError);
-        // We don't fail the whole request if just the confirmation SMS fails
-      }
+      // try {
+      //   const client = getTwilio();
+      //   await client.messages.create({
+      //     body: `Hi ${name}, thank you for reaching out to Focus in Frame. Your inquiry has been received! We'll get back to you shortly.`,
+      //     from: process.env.VITE_TWILIO_PHONE_NUMBER,
+      //     to: phone,
+      //   });
+      // } catch (smsError) {
+      //   console.error("Failed to send confirmation SMS:", smsError);
+      //   // We don't fail the whole request if just the confirmation SMS fails
+      // }
 
       res.status(200).json({ success: true, messageId: info.messageId });
     } catch (error) {
