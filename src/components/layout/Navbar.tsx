@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, useEffect, memo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import { Menu, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useMagnetic } from '../../hooks/useMagnetic';
